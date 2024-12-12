@@ -36,7 +36,7 @@ namespace MatchGame
           "👹", "👹",
           "😃", "😃",
           "🤖", "🤖",
-          "🐉", "‍🐉",
+          "🐷", "🐷",
           "👻", "👻",
           "👽", "👽"
         };
@@ -52,6 +52,30 @@ namespace MatchGame
       }
 
 
+    }
+    TextBlock lastTextBlockCliked;
+    bool findingMatch = false;
+    private void TextBlock_MouseDown (object sender, MouseButtonEventArgs e)
+    {
+      TextBlock textblock = sender as TextBlock;
+      if (findingMatch == false)
+      {
+        textblock.Visibility = Visibility.Hidden;
+        lastTextBlockCliked = textblock;
+        findingMatch = true;
+      }
+
+      else if (textblock.Text == lastTextBlockCliked.Text)
+      {
+        textblock.Visibility = Visibility.Hidden;
+        findingMatch = false;
+      }
+
+      else 
+      {
+        lastTextBlockCliked.Visibility = Visibility.Visible;
+        findingMatch = false;
+      }
     }
   }
 }
