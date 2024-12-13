@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,12 +21,30 @@ namespace MatchGame
   /// </summary>
   public partial class MainWindow : Window
   {
+    DispatcherTimer timer = new DispatcherTimer();
+    int tenthsOfSecondsElapsed;
+    int matchesFound;
+
     public List<string> animals;
     public MainWindow ()
     {
       
       InitializeComponent();
+      timer.Interval = TimeSpan.FromSeconds(.1);
+      timer.Tick += Timer_Tick;
+      
       SetAnimals();
+    }
+
+    private void Timer_Tick (object sender, EventArgs e)
+    {
+      tenthsOfSecondsElapsed++;
+      TimeTextBlock.Text = (tenthsOfSecondsElapsed / 10F).ToString("0.0s");
+      if (matchesFound == 8) 
+      {
+        timer.Stop();
+        TimeTextBlock.Text = TimeTextBlock.Text + " - Play Again?";
+      }
     }
 
     public void SetAnimals()
@@ -69,12 +88,21 @@ namespace MatchGame
       {
         textblock.Visibility = Visibility.Hidden;
         findingMatch = false;
+        matchesFound += 1;
       }
 
       else 
       {
         lastTextBlockCliked.Visibility = Visibility.Visible;
         findingMatch = false;
+      }
+    }
+
+    private void TimeTextBlock_MouseDown (object sender, MouseButtonEventArgs e)
+    {
+      if (matchesFound == 8) 
+      {
+        SetAnimals();
       }
     }
   }
